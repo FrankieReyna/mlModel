@@ -13,7 +13,7 @@ class SpacingModel(object):
     # Model constants
     LOOKAHEAD_TIME = 15000
     FORGET_THRESHOLD = -0.8
-    DEFAULT_ALPHA = 0.3
+    DEFAULT_ALPHA = 0.3 #ORIGINALLY 0.3
     C = 0.25
     F = 1.0
 
