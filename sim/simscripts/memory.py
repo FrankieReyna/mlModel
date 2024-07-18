@@ -6,20 +6,20 @@ class memory(object):
     #Memory class represents a memory that contains traces and decays related to those traces."
     #Fields:
         #sof: speed of forgetting of memory
-        #spc: spacing coefficent of memory
+        #c: spacing coefficent of memory
         #traces: list of traces of memory
         #id: list of decay in order with each trace
     #traces must be added in order (might fix later)
 
 
-    def __init__(self, sof, spc, s = 0.3, F = 1) -> None:
+    def __init__(self, sof, c, s = 0.3, F = 1) -> None:
 
         "Initializes memory"
         #sof: speed of forgetting of memory
-        #spc: spacing coefficent of memory
+        #c: spacing coefficent of memory
 
         self.sof = sof
-        self.spc = spc
+        self.c = c
         self.traces = []
         self.id = []
         self.s = s
@@ -53,7 +53,7 @@ class memory(object):
         if len(self.id) == 0:
             return self.sof
         
-        nd = self.spc * e**(self.get_actv(time)) + self.sof
+        nd = self.c * e**(self.get_actv(time)) + self.sof
     
         return nd
     
