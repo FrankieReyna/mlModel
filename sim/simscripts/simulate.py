@@ -3,18 +3,12 @@ import matplotlib.pyplot as plt
 from numpy import pi, sqrt, exp, log, e, Infinity
 import numpy as np
 import random as r
-from memory import memory
+from sim.simscripts.memory import memory
 from scipy.stats import logistic
 import pandas as pd
 
  #minutes
 FORGET_THRESHOLD = -0.8
-sof = 0.3
-SPC = 0.25
-S = 0.3
-F = 1 
-t0 = 0.3
-
 q_buff = 0.6
 
 #Returns a random activation based off of the determinstic eq and the logistic distribution of activation.
@@ -39,8 +33,19 @@ def get_response(actv, s, thresh):
     resp = r.uniform(0, 1) <= prob
     return resp
 
-"Taking in an SOF, simulates model with that sof in a memory lab test, and returns the estimated sof for each fact"
-def simulate(SIM_END_TIME, NUM_FACTS, SOF, SPC = 0.25, S = 0.3, F = 1, t0 = 0.3):
+
+def simulate(SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
+
+    "Runs a MemoryLab session using a ACT-R Memory model for each fact. Returns speed of forgetting for each fact presented"
+    "Parameters:"
+    "SIM_END_TIME: How long memory Lab session lasts"
+    "NUM_FACTS: Number of facts that could be presented"
+    "SOF: Speed of forgetting of the 'testee'"
+    "c: Spacing coefficient for decay"
+    "s: noise parameter for activation"
+    "F: Parameter in response probability"
+    "t0: reaction time of 'testee'"
+
     t = 0
     sm = SpacingModel()
 
@@ -97,8 +102,6 @@ def simulate(SIM_END_TIME, NUM_FACTS, SOF, SPC = 0.25, S = 0.3, F = 1, t0 = 0.3)
     sof.extend([SIM_END_TIME, FORGET_THRESHOLD, NUM_FACTS, SOF, SPC, S, F, t0])
     col = [f"Q{x}" for x in range(1, NUM_FACTS + 1)]
     col.extend(params)
-
-    print(col)
 
     df = pd.DataFrame(np.array([sof]), columns = col)
     return df
