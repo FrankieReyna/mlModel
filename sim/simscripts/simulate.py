@@ -110,7 +110,7 @@ if __name__ == "__main__":
     df = simulate(1, 20, 0.3) 
     print(df)
     for msof in [x / 100 for x in range(31, 50)]:
-        df = pd.concat([df, simulate(1, 20, msof)])
+        df = pd.concat([df, simulate(1, 20, msof)], ignore_index=True)
 
     df.to_csv("dataanalysis\\data\\bobo")
 
