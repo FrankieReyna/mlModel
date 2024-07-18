@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import pi, sqrt, exp, log, e, Infinity
 import numpy as np
 import random as r
-from sim.simscripts.memory import memory
+from memory import memory
 from scipy.stats import logistic
 import pandas as pd
 
@@ -45,6 +45,7 @@ def simulate(SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
     "s: noise parameter for activation"
     "F: Parameter in response probability"
     "t0: reaction time of 'testee'"
+    "returns: Dataframe of question sofs and following parameters"
 
     t = 0
     sm = SpacingModel()
@@ -54,7 +55,7 @@ def simulate(SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
     for x in range(NUM_FACTS):
         fact = Fact(x, "q", "q")
         sm.add_fact(fact)
-        memories.append(memory(SOF, SPC, s=S, F=F))
+        memories.append(memory(SOF, c, s=S, F=F))
 
     while t <= SIM_END_TIME * 60:
         fact, new = sm.get_next_fact(t * 1000)
@@ -99,7 +100,7 @@ def simulate(SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
         sof.append(sm.get_rate_of_forgetting(t * 1000, sm.facts[x]))
 
     params = ["sim_time", "forget_threshold", "num_facts", "model_sof", "c", "s", "F", "t0"]
-    sof.extend([SIM_END_TIME, FORGET_THRESHOLD, NUM_FACTS, SOF, SPC, S, F, t0])
+    sof.extend([SIM_END_TIME, FORGET_THRESHOLD, NUM_FACTS, SOF, c, S, F, t0])
     col = [f"Q{x}" for x in range(1, NUM_FACTS + 1)]
     col.extend(params)
 
