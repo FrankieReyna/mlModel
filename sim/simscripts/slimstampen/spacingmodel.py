@@ -12,14 +12,19 @@ class SpacingModel(object):
 
     # Model constants
     LOOKAHEAD_TIME = 15000
-    FORGET_THRESHOLD = -0.8
-    DEFAULT_ALPHA = 0.3 #ORIGINALLY 0.3
-    C = 0.25
-    F = 1.0
+    # FORGET_THRESHOLD = -0.8
+    # DEFAULT_ALPHA = 0.3 #ORIGINALLY 0.3
+    # C = 0.25
+    # F = 1.0
 
-    def __init__(self):
+    def __init__(self, C=0.25, F=1, forget_thresh = -0.8, min_pres = 3, default_alpha = 0.3):
         self.facts = []
         self.responses = []
+        self.C = C
+        self.F = F
+        self.FORGET_THRESHOLD = forget_thresh
+        self.MIN_PRES = min_pres
+        self.DEFAULT_ALPHA = default_alpha
 
     def add_fact(self, fact):
         # type: (Fact) -> None
@@ -132,7 +137,7 @@ class SpacingModel(object):
         """
         Estimate the rate of forgetting parameter (alpha) for an item.
         """
-        if len(encounters) < 3:
+        if len(encounters) < self.MIN_PRES:
             return(self.DEFAULT_ALPHA)
 
         a_fit = previous_alpha
