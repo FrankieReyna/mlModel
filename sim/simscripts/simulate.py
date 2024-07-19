@@ -23,8 +23,8 @@ def noise_actv(m, t):
 #Returns aresponse time based off of the deterministic eq for response time and activation
 #actv: Activation of memory
 #t0: Reaction time buffer, basically the minimum resposnse time
-def calc_rst(actv, t0):
-    return t0 + (e ** (- actv))
+def calc_rst(actv, F, t0):
+    return t0 + F * (e ** (- actv))
 
 
 #Returns a true or false response based off the activation, the s parameter, and our determined activation threshold (What is the actv thresh?)
@@ -34,10 +34,11 @@ def get_response(actv, s, thresh):
     return resp
 
 
-def simulate(SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
+def simulate(sm, SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
 
     "Runs a MemoryLab session using a ACT-R Memory model for each fact. Returns speed of forgetting for each fact presented"
     "Parameters:"
+    "sm: passed spacingmodel"
     "SIM_END_TIME: How long memory Lab session lasts"
     "NUM_FACTS: Number of facts that could be presented"
     "SOF: Speed of forgetting of the 'testee'"
@@ -69,7 +70,7 @@ def simulate(SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
             memories[fact_id].add_trace(t)
             actv = Infinity                         #PLEASSE COME BACK TO THIS
             corr = get_response(actv, S, FORGET_THRESHOLD)
-            rst = calc_rst(actv, t0) # for milliseconds
+            rst = calc_rst(actv, F, t0) # for milliseconds
 
             t += rst
 
@@ -82,7 +83,7 @@ def simulate(SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.3):
             fact_id = fact[0]
             actv = noise_actv(memories[fact_id], t)
             corr = get_response(actv, S, FORGET_THRESHOLD)
-            rst = calc_rst(actv, t0)
+            rst = calc_rst(actv, F, t0)
 
             resp = Response(fact, t * 1000, rst * 1000, corr)
             sm.register_response(resp)
