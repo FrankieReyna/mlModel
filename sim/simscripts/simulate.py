@@ -62,13 +62,10 @@ def simulate(sm, SIM_END_TIME, NUM_FACTS, SOF, c = 0.25, S = 0.3, F = 1, t0 = 0.
         fact, new = sm.get_next_fact(t * 1000)
 
         if new:
-            #IF FACT IS NEW, ADD CREATE FACT MEMORY, PLEASE ASK ANDREA ABOUT THIS
-            #Okay so the way its currently set up, I get -infinity when t = encoding time, but should be infinity at that time no?
-            #Im gonna do it ask andrea abti it l8r
             
             fact_id = fact.fact_id
             memories[fact_id].add_trace(t)
-            actv = Infinity                         #PLEASSE COME BACK TO THIS
+            actv = Infinity
             corr = get_response(actv, S, FORGET_THRESHOLD)
             rst = calc_rst(actv, F, t0) # for milliseconds
 
